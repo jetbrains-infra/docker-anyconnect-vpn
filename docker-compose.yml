@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  vpn:
+    container_name: vpn
+    image: jetbrainsinfra/docker-anyconnect-vpn
+    environment:
+      - ANYCONNECT_SERVER=${ANYCONNECT_SERVER}
+      - ANYCONNECT_USER=${ANYCONNECT_USER}
+      - ANYCONNECT_PASSWORD=${ANYCONNECT_PASSWORD}
+    networks:
+      - default
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    security_opt:
+      - label:disable
+  packer:
+    container_name: packer
+    image: alpine
+    tty: true
+    entrypoint: /bin/sh
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
+    restart: unless-stopped
