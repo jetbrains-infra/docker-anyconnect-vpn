@@ -20,8 +20,7 @@ services:
     container_name: packer
     image: alpine
     tty: true
-    entrypoint: /bin/sh
+    entrypoint: /bin/sleep 10
     depends_on:
       - vpn
     network_mode: "service:vpn"
-    restart: unless-stopped
